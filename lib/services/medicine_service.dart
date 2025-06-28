@@ -21,4 +21,41 @@ class MedicineService {
       throw Exception("Failed to load medicines");
     }
   }
+
+  static Future<List<dynamic>> getBrandsByGeneric(String genericName) async {
+    final url = Uri.parse("$baseUrl/brands/$genericName");
+
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      return data;
+    } else {
+      throw Exception("Failed to load brands for generic $genericName");
+    }
+  }
+
+  static Future<Map<String, dynamic>> getMedicineById(int medicine_Id) async {
+    final url = Uri.parse("$baseUrl/$medicine_Id");
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      return data;
+    } else {
+      throw Exception("Failed to load medicine details");
+    }
+  }
+
+  static Future<Map<String, dynamic>> getMedicineByBrandId(int brandId) async {
+    final url = Uri.parse("$baseUrl/brand/$brandId");
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      return data;
+    } else {
+      throw Exception("Failed to load medicine details for brand");
+    }
+  }
 }
