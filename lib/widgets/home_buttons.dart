@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../screens/nearby_pharmacies_screen.dart';
 
 class HomeButtons extends StatelessWidget {
   const HomeButtons({super.key});
@@ -20,7 +21,15 @@ class HomeButtons extends StatelessWidget {
             "Find Pharmacy",
             style: TextStyle(color: Colors.black, fontSize: 18),
           ),
-          onPressed: () {},
+          onPressed: () {
+            // Navigate to NearbyPharmaciesScreen when pressed
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const NearbyPharmaciesScreen(),
+              ),
+            );
+          },
         ),
         const SizedBox(height: 16),
         ElevatedButton.icon(
