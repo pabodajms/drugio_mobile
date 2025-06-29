@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/medicine_service.dart';
+import '../screens/brands_list_screen.dart';
+import '../screens/medicine_details_screen.dart';
 
 class SearchBox extends StatefulWidget {
   const SearchBox({super.key});
@@ -117,13 +119,72 @@ class _SearchBoxState extends State<SearchBox> {
               itemCount: medicines.length,
               itemBuilder: (context, index) {
                 final med = medicines[index];
+
+                String title = "";
+                String? subtitle;
+
+                if (selectedFilter == "Generic Name") {
+                  title = med['genericName'] ?? '';
+                } else if (selectedFilter == "Brand Name") {
+                  title = med['brandName'] ?? '';
+                  subtitle = med['genericName'];
+                } else {
+                  title = med['brandName'] ?? '';
+                  subtitle = med['genericName'];
+                }
+
                 return Card(
                   child: ListTile(
-                    title: Text(med['brandName'] ?? ''),
-                    subtitle: Text(med['genericName'] ?? ''),
+                    title: Text(title),
+                    subtitle: subtitle != null && subtitle.isNotEmpty
+                        ? Text(subtitle)
+                        : null,
                     trailing: const Icon(Icons.arrow_forward_ios),
-                    onTap: () {
-                      // navigate to details if you want
+                    onTap: () async {
+                      if (selectedFilter == "Generic Name") {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => BrandsListScreen(
+                              genericName: med['genericName'],
+                            ),
+                          ),
+                        );
+                      } else if (selectedFilter == "Brand Name" ||
+                          selectedFilter == "All") {
+                        // show a loading indicator while fetching full details
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (_) =>
+                              const Center(child: CircularProgressIndicator()),
+                        );
+
+                        try {
+                          final fullDetails =
+                              await MedicineService.getMedicineById(
+                                med['medicine_Id'],
+                              );
+
+                          // close the loading indicator
+                          Navigator.of(context).pop();
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  MedicineDetailsScreen(medicine: fullDetails),
+                            ),
+                          );
+                        } catch (e) {
+                          Navigator.of(context).pop(); // close loading
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Failed to load medicine details"),
+                            ),
+                          );
+                        }
+                      }
                     },
                   ),
                 );

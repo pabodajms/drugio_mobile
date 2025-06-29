@@ -1,0 +1,43 @@
+# Flutter & Dart
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+/build/
+/fvm/
+.flutter-plugins
+.flutter-plugins-dependencies
+**/generated_plugin_registrant.dart
+
+# Android (Gradle, build, etc.)
+/android/
+/gradle/
+gradle-wrapper.jar
+gradlew
+gradlew.bat
+/local.properties
+/captures/
+**/key.properties
+**/*.keystore
+**/*.jks
+
+# iOS/macOS
+/ios/
+/macos/
+/Pods/
+**/Podfile.lock
+
+# Web
+/web/
+**/main.dart.js
+**/main.dart.js.map
+
+# IDE & OS-specific
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+*.iml
+*.log
+*.lock
